@@ -32,16 +32,36 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   List<Widget> scoreKeeperList = [
-    Icon(
-      Icons.check,
-      color: Colors.green,
-      size: 24,
-    ),
-    Icon(
-      Icons.close,
-      color: Colors.red,
-    ),
+    // Icon(
+    //   Icons.check,
+    //   color: Colors.green,
+    //   size: 24,
+    // ),
+    // Icon(
+    //   Icons.close,
+    //   color: Colors.red,
+    // ),
   ];
+
+  List<String> questionList = [
+    'You can lead a cow down stairs but not up stairs.',
+    'Approximately one quarter of human bones are in the feet.',
+    'A slug\'s blood is green.',
+  ];
+
+  int currentQnNum = 0;
+
+  void updateQnNum() {
+    if (currentQnNum + 1 >= questionList.length) {
+      setState(() {
+        currentQnNum = 0;
+      });
+    } else {
+      setState(() {
+        currentQnNum++;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +72,9 @@ class _QuizScreenState extends State<QuizScreen> {
           flex: 5,
           child: Center(
             child: Text(
-              'This is a question and not a statement at all',
+              questionList[currentQnNum],
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 25.0),
+              style: const TextStyle(color: Colors.white, fontSize: 25.0),
             ),
           ),
         ),
@@ -62,7 +82,10 @@ class _QuizScreenState extends State<QuizScreen> {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: ElevatedButton(
-                onPressed: () => debugPrint('true was pressed'),
+                onPressed: () {
+                  debugPrint('true was pressed');
+                  updateQnNum();
+                },
                 child: const Text(
                   'True',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -76,7 +99,10 @@ class _QuizScreenState extends State<QuizScreen> {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: ElevatedButton(
-              onPressed: () => debugPrint('false was pressed'),
+              onPressed: () {
+                debugPrint('false was pressed');
+                updateQnNum();
+              },
               child: const Text(
                 'False',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
