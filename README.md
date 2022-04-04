@@ -1,6 +1,6 @@
 # quizzo
 
-A sinple quiz app made using Flutter
+A simple quiz app made using Flutter
 
 ## Getting Started
 
