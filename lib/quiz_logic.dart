@@ -1,4 +1,3 @@
-import 'package:cool_alert/cool_alert.dart';
 import 'package:quizzo/question.dart';
 
 class QuizLogic {

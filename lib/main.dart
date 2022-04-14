@@ -1,4 +1,5 @@
-import 'package:cool_alert/cool_alert.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:quizzo/question.dart';
 import 'quiz_logic.dart';
@@ -77,16 +78,25 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void checkProgress() {
-    if (scoreKeeperList.length == quizLogic.getQnListLength()) {
-      CoolAlert.show(
+    if (scoreKeeperList.length >= quizLogic.getQnListLength()) {
+      scoreKeeperList = [];
+      quizLogic.restartQuiz();
+      showDialog(
         context: context,
-        type: CoolAlertType.success,
-        title: "Completed",
-        text: "You have finished the quiz!",
-        confirmBtnText: "Retry",
-        onConfirmBtnTap: () {
-          quizLogic.restartQuiz();
-        },
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Quiz Completed'),
+          content: const Text('You have made it to the and of the quiz'),
+          actions: [
+            TextButton(
+              onPressed: () => setState(
+                () {
+                  Navigator.pop(context);
+                },
+              ),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
       );
     } else {
       quizLogic.nextQuestion();
