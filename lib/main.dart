@@ -86,7 +86,7 @@ class _QuizScreenState extends State<QuizScreen> {
         builder: (BuildContext context) => WillPopScope(
           onWillPop: () => Future.value(false),
           child: AlertDialog(
-            title: const Text('Quiz Completed'),
+            title: const Text('Quiz Completed 🥳'),
             content:
                 Text('You have scored ${quizLogic.getScore()}/${quizLogic.getQnListLength() - 1}'),
             actions: [
