@@ -1,4 +1,9 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:quizzo/question.dart';
+import 'quiz_logic.dart';
+
+QuizLogic quizLogic = QuizLogic();
 
 void main() {
   runApp(const Quizzo());
@@ -43,23 +48,48 @@ class _QuizScreenState extends State<QuizScreen> {
     // ),
   ];
 
-  List<String> questionList = [
-    'You can lead a cow down stairs but not up stairs.',
-    'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.',
-  ];
-
-  int currentQnNum = 0;
-
-  void updateQnNum() {
-    if (currentQnNum + 1 >= questionList.length) {
+  void checkAnswer(bool userAnswer) {
+    if (quizLogic.getAnswer() == userAnswer) {
       setState(() {
-        currentQnNum = 0;
+        scoreKeeperList.add(
+          const Icon(
+            Icons.check,
+            color: Colors.green,
+            size: 24,
+          ),
+        );
+        debugPrint('user is correct!');
+        checkProgress();
       });
     } else {
       setState(() {
-        currentQnNum++;
+        scoreKeeperList.add(
+          const Icon(
+            Icons.close,
+            color: Colors.red,
+            size: 24,
+          ),
+        );
+        debugPrint('user is wrong :(');
+        checkProgress();
       });
+    }
+  }
+
+  void checkProgress() {
+    if (scoreKeeperList.length == quizLogic.getQnListLength()) {
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.success,
+        title: "Completed",
+        text: "You have finished the quiz!",
+        confirmBtnText: "Retry",
+        onConfirmBtnTap: () {
+          quizLogic.restartQuiz();
+        },
+      );
+    } else {
+      quizLogic.nextQuestion();
     }
   }
 
@@ -72,7 +102,7 @@ class _QuizScreenState extends State<QuizScreen> {
           flex: 5,
           child: Center(
             child: Text(
-              questionList[currentQnNum],
+              quizLogic.getQuestion(),
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontSize: 25.0),
             ),
@@ -84,7 +114,7 @@ class _QuizScreenState extends State<QuizScreen> {
             child: ElevatedButton(
                 onPressed: () {
                   debugPrint('true was pressed');
-                  updateQnNum();
+                  checkAnswer(true);
                 },
                 child: const Text(
                   'True',
@@ -101,7 +131,7 @@ class _QuizScreenState extends State<QuizScreen> {
             child: ElevatedButton(
               onPressed: () {
                 debugPrint('false was pressed');
-                updateQnNum();
+                checkAnswer(false);
               },
               child: const Text(
                 'False',
