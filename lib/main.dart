@@ -60,6 +60,7 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
         );
         debugPrint('user is correct!');
+        quizLogic.addScore();
         checkProgress();
       });
     } else {
@@ -79,23 +80,28 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void checkProgress() {
     if (scoreKeeperList.length >= quizLogic.getQnListLength()) {
-      scoreKeeperList = [];
-      quizLogic.restartQuiz();
       showDialog(
         context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Quiz Completed'),
-          content: const Text('You have made it to the and of the quiz'),
-          actions: [
-            TextButton(
-              onPressed: () => setState(
-                () {
-                  Navigator.pop(context);
-                },
+        barrierDismissible: false,
+        builder: (BuildContext context) => WillPopScope(
+          onWillPop: () => Future.value(false),
+          child: AlertDialog(
+            title: const Text('Quiz Completed'),
+            content:
+                Text('You have scored ${quizLogic.getScore()}/${quizLogic.getQnListLength() - 1}'),
+            actions: [
+              TextButton(
+                onPressed: () => setState(
+                  () {
+                    scoreKeeperList = [];
+                    quizLogic.restartQuiz();
+                    Navigator.pop(context);
+                  },
+                ),
+                child: const Text('Retry'),
               ),
-              child: const Text('Retry'),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     } else {

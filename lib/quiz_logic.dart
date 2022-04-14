@@ -2,6 +2,7 @@ import 'package:quizzo/question.dart';
 
 class QuizLogic {
   int _currentQnNum = 0;
+  int _score = 0;
 
   final List<Question> _questionList = [
     Question('Some cats are actually allergic to humans', true),
@@ -35,6 +36,15 @@ class QuizLogic {
 
   void restartQuiz() {
     _currentQnNum = 0;
+    _score = 0;
+  }
+
+  void addScore() {
+    _score++;
+  }
+
+  int getScore() {
+    return _score;
   }
 
   int getQnListLength() {
